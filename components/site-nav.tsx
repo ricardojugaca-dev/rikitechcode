@@ -3,7 +3,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle"; // 1. Importar el selector
 import { Menu, X, Youtube, Linkedin, Github, Send } from "lucide-react";
 
