@@ -6,7 +6,7 @@ import { siteConfig } from "@/lib/site";
 import { metadataKeywords } from "./metadata";
 import { SiteNav } from "@/components/site-nav";
 import Footer from "@/components/footer";
-import { ScrollToTop } from "@/components/scroll-to-top";
+import { ScrollToTop } from "@/components/scroll-to-top"; // 1. Verificar esta importación
 import { HashScrollHandler } from "@/components/hash-scroll-handler";
 import "@/app/globals.css";
 
@@ -46,6 +46,8 @@ export default function RootLayout({
           <SiteNav />
           <main>{children}</main>
           <Footer />
+
+          {/* 2. VERIFICAR QUE ESTÉ DENTRO DEL BODY Y THEMEPROVIDER */}
           <ScrollToTop />
         </ThemeProvider>
       </body>
