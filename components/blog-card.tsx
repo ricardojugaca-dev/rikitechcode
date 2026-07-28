@@ -8,7 +8,6 @@ interface BlogCardProps {
   date: string;
   thumbnail?: string;
   tags?: string[]; // Recepción del arreglo completo de categorías
-  showRightBorder?: boolean;
 }
 
 export function BlogCard({
@@ -18,8 +17,7 @@ export function BlogCard({
   date,
   thumbnail,
   tags = ["Desarrollo"], // Valor por defecto en caso de no tener etiquetas
-  showRightBorder = true,
-}: BlogCardProps) {
+ }: BlogCardProps) {
   return (
     <Link
       href={url}
