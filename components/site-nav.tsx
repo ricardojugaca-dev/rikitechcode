@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageToggle } from "@/components/language-toggle"; // 1. Importar el selector
 import { Menu, X, Youtube, Linkedin, Github, Send } from "lucide-react";
 
 export function SiteNav() {
@@ -28,25 +29,23 @@ export function SiteNav() {
             />
           </Link>
 
-          {/* Línea separadora (Solo en escritorio) */}
           <div className="hidden md:block h-4 w-px bg-border/60" />
 
-          {/* REDES SOCIALES EN ESCRITORIO (md:flex -> A un lado del logo) */}
           <div className="hidden md:flex items-center gap-1.5">
             <SocialIcons />
           </div>
         </div>
 
-        {/* REDES SOCIALES EN MÓVIL (md:hidden -> Centradas en la pantalla) */}
+        {/* REDES SOCIALES EN MÓVIL (Centradas) */}
         <div className="flex md:hidden items-center justify-center gap-1 sm:gap-1.5 mx-auto">
           <SocialIcons />
         </div>
 
-        {/* CONTENEDOR DERECHO: ENLACES, TEMA Y MENÚ MÓVIL */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        {/* CONTENEDOR DERECHO: ENLACES, IDIOMA, TEMA Y MENÚ MÓVIL */}
+        <div className="flex items-center gap-2 sm:gap-3">
           
           {/* Enlaces de navegación (Escritorio) */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground mr-2">
             <Link href="/" className="hover:text-foreground transition-colors">
               Inicio
             </Link>
@@ -60,6 +59,10 @@ export function SiteNav() {
               Privacidad
             </Link>
           </nav>
+
+          {/* SELECTOR DE IDIOMA (EN/ES) */}
+          {/* Elimina o comenta esta línea en components/site-nav.tsx */}
+       {/* <LanguageToggle /> */}
 
           {/* CAMBIO DE TEMA */}
           <ThemeToggle />
@@ -114,11 +117,9 @@ export function SiteNav() {
   );
 }
 
-{/* COMPONENTE REUTILIZABLE DE ÍCONOS SOCIALES CON COLOR */}
 function SocialIcons() {
   return (
     <>
-      {/* Telegram */}
       <a
         href="https://t.me/tu_canal"
         target="_blank"
@@ -128,8 +129,6 @@ function SocialIcons() {
       >
         <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
       </a>
-
-      {/* YouTube */}
       <a
         href="https://youtube.com/@tu_canal"
         target="_blank"
@@ -139,8 +138,6 @@ function SocialIcons() {
       >
         <Youtube className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
       </a>
-
-      {/* LinkedIn */}
       <a
         href="https://linkedin.com/in/tu_usuario"
         target="_blank"
@@ -150,8 +147,6 @@ function SocialIcons() {
       >
         <Linkedin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
       </a>
-
-      {/* GitHub */}
       <a
         href="https://github.com/tu_usuario"
         target="_blank"

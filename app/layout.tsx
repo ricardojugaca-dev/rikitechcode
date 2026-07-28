@@ -6,6 +6,8 @@ import { siteConfig } from "@/lib/site";
 import { metadataKeywords } from "./metadata";
 import { SiteNav } from "@/components/site-nav";
 import Footer from "@/components/footer";
+import { ScrollToTop } from "@/components/scroll-to-top";
+import { HashScrollHandler } from "@/components/hash-scroll-handler";
 import "@/app/globals.css";
 
 export const viewport: Viewport = {
@@ -29,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="es"
       className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
       suppressHydrationWarning
     >
@@ -40,9 +42,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <HashScrollHandler />
           <SiteNav />
-          {children}
+          <main>{children}</main>
           <Footer />
+          <ScrollToTop />
         </ThemeProvider>
       </body>
     </html>
