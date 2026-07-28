@@ -15,10 +15,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,  
+    default: 'Riki Tech Code',
+    template: `%s | Riki Tech Code`,  
   },
-  description: siteConfig.description,
+  description: 'Blog de programación, desarrollo web y proyectos de software por Ricardo.',
   keywords: metadataKeywords,
 };
 
