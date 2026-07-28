@@ -3,8 +3,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { LanguageToggle } from "@/components/language-toggle"; // 1. Importar el selector
+import { ThemeToggle } from "@/components/theme-toggle"; // ← 1. Importamos ThemeToggle
 import { Menu, X, Youtube, Linkedin, Github, Send } from "lucide-react";
+
+// ❌ Quitamos: import { LanguageToggle } from "@/components/language-toggle";
 
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +42,7 @@ export function SiteNav() {
           <SocialIcons />
         </div>
 
-        {/* CONTENEDOR DERECHO: ENLACES, IDIOMA, TEMA Y MENÚ MÓVIL */}
+        {/* CONTENEDOR DERECHO: ENLACES, TEMA Y MENÚ MÓVIL */}
         <div className="flex items-center gap-2 sm:gap-3">
           
           {/* Enlaces de navegación (Escritorio) */}
@@ -58,10 +60,6 @@ export function SiteNav() {
               Privacidad
             </Link>
           </nav>
-
-          {/* SELECTOR DE IDIOMA (EN/ES) */}
-          {/* Elimina o comenta esta línea en components/site-nav.tsx */}
-       {/* <LanguageToggle /> */}
 
           {/* CAMBIO DE TEMA */}
           <ThemeToggle />
