@@ -7,20 +7,20 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
-          {/* COLUMNA 1: BRANDING & DESCRIPCIÓN */}
-          <div className="md:col-span-2 flex flex-col gap-4">
+          {/* COLUMNA 1: BRANDING & DESCRIPCIÓN (Centrado en móvil, a la izquierda en PC) */}
+          <div className="md:col-span-2 flex flex-col items-center md:items-start text-center md:text-left gap-4">
             <Link 
               href="/" 
               className="font-bold text-xl tracking-tight text-foreground hover:opacity-80 transition-opacity"
             >
-              Riki Tech Code
+              RikiTech Code
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
               Blog de tecnología, desarrollo de software, tutoriales web y experiencias en el mundo de la programación.
             </p>
 
-            {/* ÍCONOS DE REDES SOCIALES CON COLOR Y MINIMALISTAS */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            {/* ÍCONOS DE REDES SOCIALES (Centrados en móvil, a la izquierda en PC) */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
               
               {/* Telegram */}
               <a
@@ -117,8 +117,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* COLUMNA 2: NAVEGACIÓN */}
-          <div className="flex flex-col gap-3">
+          {/* COLUMNA 2: NAVEGACIÓN (Centrada en móvil) */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left gap-3">
             <h3 className="text-sm font-semibold text-foreground">Navegación</h3>
             <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
               <li>
@@ -139,8 +139,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* COLUMNA 3: LEGAL & MONETIZACIÓN */}
-          <div className="flex flex-col gap-3">
+          {/* COLUMNA 3: LEGAL & MONETIZACIÓN (Centrada en móvil) */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left gap-3">
             <h3 className="text-sm font-semibold text-foreground">Legal</h3>
             <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
               <li>
@@ -163,10 +163,10 @@ export default function Footer() {
 
         </div>
 
-        {/* LÍNEA SEPARADORA Y COPYRIGHT (SIN TEXTO EXTRA) */}
-        <div className="mt-12 pt-6 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground">
-          <p>
-            &copy; {new Date().getFullYear()} Riki Tech Code. Todos los derechos reservados.
+        {/* LÍNEA SEPARADORA Y COPYRIGHT */}
+        <div className="mt-12 pt-6 border-t border-border/50 flex items-center justify-center md:justify-between text-xs text-muted-foreground">
+          <p className="text-center md:text-left">
+            &copy; {new Date().getFullYear()} RikiTech Code. Todos los derechos reservados.
           </p>
         </div>
       </div>
