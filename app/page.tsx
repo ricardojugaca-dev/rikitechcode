@@ -126,6 +126,7 @@ export default async function HomePage({
                   description={blog.data.description}
                   date={formattedDate}
                   thumbnail={blog.data.thumbnail}
+                  tags={blog.data.tags} // <-- Pasa el arreglo completo de etiquetas
                   showRightBorder={filteredBlogs.length < 3}
                 />
               );
