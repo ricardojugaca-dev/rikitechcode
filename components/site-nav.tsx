@@ -4,7 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X } from "lucide-react"; // Usamos iconos de Lucide (ya vienen instalados en la plantilla)
+import { Menu, X, Youtube, Linkedin, Github, Send } from "lucide-react";
 
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,13 +13,13 @@ export function SiteNav() {
 
   return (
     <header className="sticky top-0 z-20 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="max-w-7xl mx-auto w-full flex h-14 items-center justify-between px-6">
+      <div className="max-w-7xl mx-auto w-full flex h-14 items-center justify-between px-3 sm:px-6 relative">
         
-        {/* LADO IZQUIERDO: LOGO ORIGINAL */}
+        {/* LADO IZQUIERDO: LOGO */}
         <div className="flex items-center">
           <Link
             href="/"
-            className="mr-6 flex items-center space-x-2 font-medium text-lg tracking-tighter h-8 w-8 rounded-md overflow-hidden hover:opacity-80 transition-opacity"
+            className="flex items-center font-medium text-lg tracking-tighter h-8 w-8 rounded-md overflow-hidden hover:opacity-80 transition-opacity shrink-0"
           >
             <img
               src="/magicui-logo.png"
@@ -29,10 +29,57 @@ export function SiteNav() {
           </Link>
         </div>
 
-        {/* LADO DERECHO: ENLACES (Escritorio) + TEMA + BOTÓN MÓVIL */}
-        <div className="flex items-center gap-4">
+        {/* CENTRO: REDES SOCIALES CON COLOR */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Telegram */}
+          <a
+            href="https://t.me/tu_canal"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 sm:p-2 rounded-full bg-[#0088cc]/10 text-[#0088cc] hover:bg-[#0088cc] hover:text-white transition-all duration-200"
+            aria-label="Telegram"
+          >
+            <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </a>
+
+          {/* YouTube */}
+          <a
+            href="https://youtube.com/@tu_canal"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 sm:p-2 rounded-full bg-[#FF0000]/10 text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all duration-200"
+            aria-label="YouTube"
+          >
+            <Youtube className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </a>
+
+          {/* LinkedIn */}
+          <a
+            href="https://linkedin.com/in/tu_usuario"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 sm:p-2 rounded-full bg-[#0A66C2]/10 text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition-all duration-200"
+            aria-label="LinkedIn"
+          >
+            <Linkedin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </a>
+
+          {/* GitHub */}
+          <a
+            href="https://github.com/tu_usuario"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 sm:p-2 rounded-full bg-foreground/10 text-foreground hover:bg-foreground hover:text-background transition-all duration-200"
+            aria-label="GitHub"
+          >
+            <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </a>
+        </div>
+
+        {/* LADO DERECHO: ENLACES + TEMA + HAMBURGUESA */}
+        <div className="flex items-center gap-2 sm:gap-4">
           
-          {/* Enlaces de navegación (Ocultos en móviles, visibles en tablets/PC) */}
+          {/* Enlaces de navegación (PC) */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
             <Link href="/" className="hover:text-foreground transition-colors">
               Inicio
@@ -48,10 +95,10 @@ export function SiteNav() {
             </Link>
           </nav>
 
-          {/* BOTÓN DE CAMBIO DE TEMA (Intacto a la derecha) */}
+          {/* CAMBIO DE TEMA */}
           <ThemeToggle />
 
-          {/* BOTÓN HAMBURGUESA (Visible solo en móviles) */}
+          {/* BOTÓN HAMBURGUESA (Móviles) */}
           <button
             onClick={toggleMenu}
             className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus:outline-none"
@@ -62,7 +109,7 @@ export function SiteNav() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL DESPLEGABLE (Aparece al hacer clic en hamburguesa) */}
+      {/* MENÚ MÓVIL DESPLEGABLE */}
       {isOpen && (
         <div className="md:hidden border-b border-border/40 bg-background px-6 py-4 animate-in fade-in slide-in-from-top-2">
           <nav className="flex flex-col space-y-3 text-sm font-medium">
