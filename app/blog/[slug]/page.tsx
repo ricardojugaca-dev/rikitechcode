@@ -242,7 +242,7 @@ export default async function BlogPost({ params }: PageProps) {
         <div className="flex divide-x divide-border w-full h-full min-h-full">
           
           {/* COLUMNA IZQUIERDA: CONTENIDO Y POSTS RELACIONADOS */}
-          <main className="flex-1 w-full p-0 overflow-hidden flex flex-col justify-between">
+          <main className="flex-1 w-full min-w-0 p-0 overflow-hidden flex flex-col justify-between">
             <div>
               {page.data.thumbnail && (
                 <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden object-cover border-b border-border">
@@ -272,8 +272,8 @@ export default async function BlogPost({ params }: PageProps) {
             </div>
           </main>
 
-          {/* COLUMNA DERECHA: BARRA LATERAL (DESKTOP) */}
-          <aside className="hidden lg:block w-[380px] flex-shrink-0 p-6 lg:p-8 bg-muted/30 dark:bg-muted/10">
+          {/* COLUMNA DERECHA: BARRA LATERAL (ADAPTADA DESDE PANTALLAS MD Y LG) */}
+          <aside className="hidden md:block md:w-[300px] lg:w-[380px] flex-shrink-0 p-4 lg:p-8 bg-muted/30 dark:bg-muted/10">
             <div className="sticky top-20 space-y-6">
               
               {/* 1. TARJETA DE LOGO + REDES SOCIALES (DOS TONOS) */}
@@ -296,7 +296,7 @@ export default async function BlogPost({ params }: PageProps) {
                   ¡Sígueme en todas mis redes sociales!
                 </p>
 
-                {/* Grid de 8 redes sociales (2 por fila con la franja de icono a la izquierda) */}
+                {/* Grid de 8 redes sociales */}
                 <div className="grid grid-cols-2 gap-2.5 w-full pt-1">
                   {socialLinks.map((social) => (
                     <a
@@ -312,7 +312,7 @@ export default async function BlogPost({ params }: PageProps) {
                       </div>
 
                       {/* Texto del botón */}
-                      <span className="flex-1 text-center text-xs font-semibold pr-2 tracking-wide">
+                      <span className="flex-1 text-center text-xs font-semibold pr-2 tracking-wide truncate">
                         {social.name}
                       </span>
                     </a>
