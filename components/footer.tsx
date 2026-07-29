@@ -3,7 +3,7 @@ import { Github, Youtube, Instagram, Send, Linkedin, Facebook } from "lucide-rea
 
 export default function Footer() {
   return (
-    <footer className="bg-background border-t border-border mt-16">
+    <footer className="bg-background border-t border-border">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
