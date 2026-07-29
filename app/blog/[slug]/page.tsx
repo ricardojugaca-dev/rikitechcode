@@ -239,7 +239,8 @@ export default async function BlogPost({ params }: PageProps) {
         {/* LÍNEAS DIVISIONARIAS VERTICALES DE BORDE EXTERIOR */}
         <div className="absolute inset-y-0 left-3 right-3 sm:left-0 sm:right-0 max-w-7xl mx-auto border-x border-border pointer-events-none z-20" />
 
-        <div className="flex divide-x divide-border w-full h-full min-h-full">
+        {/* CAMBIO CLAVE 1: flex-col en móvil, md:flex-row en escritorio. Divide las secciones con borde. */}
+        <div className="flex flex-col md:flex-row md:divide-x divide-y md:divide-y-0 divide-border w-full h-full min-h-full">
           
           {/* COLUMNA IZQUIERDA: CONTENIDO Y POSTS RELACIONADOS */}
           <main className="flex-1 w-full min-w-0 p-0 overflow-hidden flex flex-col justify-between">
@@ -272,8 +273,8 @@ export default async function BlogPost({ params }: PageProps) {
             </div>
           </main>
 
-          {/* COLUMNA DERECHA: BARRA LATERAL (ADAPTADA DESDE PANTALLAS MD Y LG) */}
-          <aside className="hidden md:block md:w-[300px] lg:w-[380px] flex-shrink-0 p-4 lg:p-8 bg-muted/30 dark:bg-muted/10">
+          {/* CAMBIO CLAVE 2: quitamos 'hidden', ahora se muestra siempre. En móvil abarca w-full, en md toma su ancho normal */}
+          <aside className="w-full md:w-[300px] lg:w-[380px] flex-shrink-0 p-4 lg:p-8 bg-muted/30 dark:bg-muted/10">
             <div className="sticky top-20 space-y-6">
               
               {/* 1. TARJETA DE LOGO + REDES SOCIALES (DOS TONOS) */}
@@ -296,8 +297,8 @@ export default async function BlogPost({ params }: PageProps) {
                   ¡Sígueme en todas mis redes sociales!
                 </p>
 
-                {/* Grid de 8 redes sociales */}
-                <div className="grid grid-cols-2 gap-2.5 w-full pt-1">
+                {/* Grid de 8 redes sociales (se adapta de 2 a 4 columnas según la pantalla) */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-2.5 w-full pt-1">
                   {socialLinks.map((social) => (
                     <a
                       key={social.name}
