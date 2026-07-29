@@ -67,34 +67,64 @@ export default async function BlogPost({ params }: PageProps) {
 
       <div className="space-y-4 border-b border-border relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col gap-6 p-6">
-          <div className="flex flex-wrap items-center gap-3 gap-y-5 text-sm text-muted-foreground">
-            <Button variant="outline" asChild className="h-6 w-6">
-              <Link href="/">
-                <ArrowLeft className="w-4 h-4" />
-                <span className="sr-only">Back to all articles</span>
-              </Link>
-            </Button>
-            {page.data.tags && page.data.tags.length > 0 && (
-              <div className="flex flex-wrap gap-3 text-muted-foreground">
-                {page.data.tags.map((tag: string) => (
-                  <span
-                    key={tag}
-                    className="h-6 w-fit px-3 text-sm font-medium bg-muted text-muted-foreground rounded-md border flex items-center justify-center"
-                  >
-                    {tag}
-                  </span>
-                ))}
+          
+          {/* ENCABEZADO DE METADATOS (CATEGORÍAS, FECHA Y AUTOR ABAJO) */}
+          <div className="flex flex-col gap-3">
+            
+            {/* Fila 1: Botón Volver, Categorías y Fecha */}
+            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+              {/* Botón Volver */}
+              <Button variant="outline" asChild className="h-6 w-6">
+                <Link href="/">
+                  <ArrowLeft className="w-4 h-4" />
+                  <span className="sr-only">Back to all articles</span>
+                </Link>
+              </Button>
+
+              {/* Categorías */}
+              {page.data.tags && page.data.tags.length > 0 && (
+                <div className="flex flex-wrap gap-3 text-muted-foreground">
+                  {page.data.tags.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="h-6 w-fit px-3 text-sm font-medium bg-muted text-muted-foreground rounded-md border flex items-center justify-center"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Separador vertical si hay categorías */}
+              {page.data.tags && page.data.tags.length > 0 && (
+                <span className="text-border">•</span>
+              )}
+
+              {/* Fecha */}
+              <time className="font-medium text-muted-foreground">
+                {formattedDate}
+              </time>
+            </div>
+
+            {/* Fila 2: Elemento de Autor situado abajo de la fecha */}
+            <div className="flex items-center">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md border border-border/80 bg-muted/40 text-xs text-muted-foreground">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                <span>Autor <strong className="font-semibold text-foreground">RikiTech Code</strong></span>
               </div>
-            )}
-            <time className="font-medium text-muted-foreground">
-              {formattedDate}
-            </time>
+            </div>
+
           </div>
 
+          {/* Título Principal */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tighter text-balance">
             {page.data.title}
           </h1>
 
+          {/* Descripción */}
           {page.data.description && (
             <p className="text-muted-foreground max-w-4xl md:text-lg md:text-balance">
               {page.data.description}
@@ -102,6 +132,7 @@ export default async function BlogPost({ params }: PageProps) {
           )}
         </div>
       </div>
+
       <div className="flex divide-x divide-border relative max-w-7xl mx-auto px-4 md:px-0 z-10">
         <div className="absolute max-w-7xl mx-auto left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] lg:w-full h-full border-x border-border p-0 pointer-events-none" />
         <main className="w-full p-0 overflow-hidden">
