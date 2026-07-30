@@ -1,11 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Github, Youtube, Instagram, Send, Linkedin, Facebook } from "lucide-react";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Verificamos si estamos dentro de la sección de artículos/blog (ej. "/blog" o "/post/...")
+  // Puedes ajustar la condición si tus rutas de artículos usan otro prefijo
+  const isArticlePage = pathname.startsWith("/blog") || pathname.startsWith("/post");
+
   return (
-    <footer className="w-full bg-background">
-      <div className="max-w-7xl mx-auto border-x border-t border-border px-6 pt-12 pb-6">
-        
+    <footer className="w-full bg-background border-t border-border">
+      <div
+        className={`max-w-7xl mx-auto px-6 pt-12 pb-6 ${
+          isArticlePage ? "border-x border-border" : ""
+        }`}
+      >
         {/* GRID DE CONTENIDO PRINCIPAL */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           
@@ -76,7 +88,7 @@ export default function Footer() {
 
         </div>
 
-        {/* LÍNEA SEPARADORA Y COPYRIGHT (-mx-6 hace que la línea llegue exactamente hasta los bordes laterales) */}
+        {/* LÍNEA SEPARADORA Y COPYRIGHT */}
         <div className="-mx-6 border-t border-border pt-6 px-6 flex items-center justify-center md:justify-between text-xs text-muted-foreground">
           <p className="text-center md:text-left">
             &copy; {new Date().getFullYear()} RikiTech Code. Todos los derechos reservados.
