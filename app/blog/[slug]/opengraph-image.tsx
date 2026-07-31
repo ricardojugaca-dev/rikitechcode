@@ -6,6 +6,15 @@ import {
   type AuthorKey,
 } from "@/lib/authors";
 
+type BlogData = {
+  title: string;
+  description?: string;
+  date?: string;
+  author?: string;
+  tags?: string[];
+  thumbnail?: string;
+};
+
 export const runtime = "nodejs";
 export const alt = "Blog Post";
 export const size = {
@@ -170,15 +179,16 @@ export default async function Image({ params }: { params: { slug: string } }) {
     if (!page) {
   return new Response("Blog post not found", { status: 404 });
 }
+const data = page.data as BlogData;
 
 const authorKey =
-  typeof page.data.author === "string"
-    ? page.data.author
+  typeof data.author === "string"
+    ? data.author
     : "";
 
 const date =
-  typeof page.data.date === "string"
-    ? page.data.date
+  typeof data.date === "string"
+    ? data.date
     : undefined;
 
 const authorDetails =
@@ -218,9 +228,9 @@ const authorDetails =
                 height={80}
                 style={styles.logo}
               />
-              <h1 style={styles.title}>{page.data.title}</h1>
-              {page.data.description && (
-                <p style={styles.summary}>{page.data.description}</p>
+              <h1 style={styles.title}>{data.title}</h1>
+              {data.description && (
+                <p style={styles.summary}>{data.description}</p>
               )}
             </div>
             <div style={styles.metaContainer}>
