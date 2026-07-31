@@ -12,15 +12,9 @@ interface SiteNavProps {
   posts?: { slug: string; title: string; description: string }[];
 }
 
-
 export function SiteNav({ posts = [] }: SiteNavProps) {
-
-  
-
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -69,17 +63,13 @@ export function SiteNav({ posts = [] }: SiteNavProps) {
           {/* CONTENEDOR DERECHO: BUSCADOR, ENLACES, TEMA Y MENÚ MÓVIL */}
           <div className="flex items-center gap-2 sm:gap-3">
             
-            {/* BOTÓN DE BÚSQUEDA */}
+            {/* BOTÓN DE BÚSQUEDA (Solo ícono de la lupa) */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 px-2.5 py-1.5 rounded-md border border-border/60 bg-muted/40 hover:bg-muted text-muted-foreground text-xs transition-colors"
+              className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
               aria-label="Buscar"
             >
-              <Search className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="hidden lg:inline">Buscar...</span>
-              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] bg-background border border-border/80 rounded font-mono text-muted-foreground">
-                ⌘K
-              </kbd>
+              <Search className="w-4 h-4" />
             </button>
 
             {/* Enlaces de navegación (Escritorio) */}
@@ -154,8 +144,6 @@ export function SiteNav({ posts = [] }: SiteNavProps) {
         onClose={() => setIsSearchOpen(false)}
         posts={posts} // Se los pasa a SearchWrapper
       />
-
-      
     </>
   );
 }
