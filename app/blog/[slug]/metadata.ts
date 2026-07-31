@@ -2,6 +2,15 @@ import { Metadata } from "next";
 import { blog } from "@/lib/source";
 import { siteConfig } from "@/lib/site";
 
+type BlogData = {
+  title: string;
+  description?: string;
+  date?: string;
+  author?: string;
+  tags?: string[];
+  thumbnail?: string;
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -29,9 +38,7 @@ export async function generateMetadata({
     const ogUrl = `${siteConfig.url}/blog/${slug}`;
     const ogImage = `${ogUrl}/opengraph-image`;
 
-    const data = page.data as typeof page.data & {
-        tags?: unknown;
-      };
+    const data = page.data as BlogData;
 
     const tags = Array.isArray(data.tags)
       ? data.tags.filter(
@@ -40,24 +47,23 @@ export async function generateMetadata({
       : [];
 
     const author =
-      typeof page.data.author === "string" && page.data.author.trim()
-        ? page.data.author
+      typeof data.author === "string" && data.author.trim()
+        ? data.author
         : "Magic UI";
 
     const thumbnail =
-      typeof page.data.thumbnail === "string" &&
-      page.data.thumbnail.trim()
-        ? page.data.thumbnail
-        : ogImage;
+        typeof data.thumbnail === "string" &&
+        data.thumbnail.trim()
+          ? data.thumbnail
+          : ogImage;
 
     const date =
-      typeof page.data.date === "string"
-        ? page.data.date
-        : undefined;
-
+        typeof data.date === "string"
+          ? data.date
+          : undefined;
     return {
-      title: page.data.title,
-      description: page.data.description,
+      title: data.title,
+      description: data.description,
       keywords: [
         page.data.title,
         ...tags,
@@ -88,8 +94,8 @@ export async function generateMetadata({
         },
       },
       openGraph: {
-        title: page.data.title,
-        description: page.data.description,
+        title: data.title,
+        description: data.description,
         type: "article",
         url: ogUrl,
         publishedTime: date,
@@ -100,7 +106,7 @@ export async function generateMetadata({
             url: thumbnail,
             width: 1200,
             height: 630,
-            alt: page.data.title,
+            alt: data.title,
           },
         ],
         siteName: siteConfig.name,
