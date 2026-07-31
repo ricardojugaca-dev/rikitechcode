@@ -32,11 +32,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // Leemos los artículos MDX en el servidor de forma nativa
-  const posts = blog.getPages().map((page) => ({
-    slug: page.url.replace("/blog/", ""),
-    title: page.data.title,
-    description: page.data.description ?? "",
-  }));
+  // Cambia esta sección en app/layout.tsx:
+    const posts = blog.getPages().map((page) => ({
+      slug: page.url.replace("/blog/", ""),
+      title: page.data.title ?? "Sin título", // 👈 Agregamos el operador ??
+      description: page.data.description ?? "",
+    }));
 
   return (
     <html
