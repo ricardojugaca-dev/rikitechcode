@@ -29,9 +29,13 @@ export async function generateMetadata({
     const ogUrl = `${siteConfig.url}/blog/${slug}`;
     const ogImage = `${ogUrl}/opengraph-image`;
 
-    const tags = Array.isArray((page.data as any).tags)
-      ? (page.data as any).tags.filter(
-          (tag: unknown): tag is string => typeof tag === "string"
+    const data = page.data as typeof page.data & {
+        tags?: unknown;
+      };
+
+    const tags = Array.isArray(data.tags)
+      ? data.tags.filter(
+          (tag): tag is string => typeof tag === "string"
         )
       : [];
 
