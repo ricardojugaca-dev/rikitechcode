@@ -4,18 +4,23 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
-import SearchModal from "@/components/SearchModal"; // Importamos el modal
+import SearchWrapper from "@/components/search-wrapper";
 import { Menu, X, Youtube, Linkedin, Github, Send, Search } from "lucide-react";
 
-// Lista de prueba para el buscador (puedes añadir o conectar con tus posts reales)
-const postsEjemplo = [
-  { slug: "introduccion-nextjs", title: "Introducción a Next.js App Router", description: "Aprende los conceptos fundamentales de Next.js." },
-  { slug: "tailwind-css-tips", title: "Trucos avanzados de Tailwind CSS", description: "Mejora tu flujo de diseño con estas utilidades." },
-];
+// Agrega el tipo de las props a tu componente SiteNav:
+interface SiteNavProps {
+  posts?: { slug: string; title: string; description: string }[];
+}
 
-export function SiteNav() {
+
+export function SiteNav({ posts = [] }: SiteNavProps) {
+
+  
+
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -144,12 +149,13 @@ export function SiteNav() {
         )}
       </header>
 
-      {/* COMPONENTE MODAL DE BÚSQUEDA */}
-      <SearchModal
+      <SearchWrapper
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        posts={postsEjemplo}
+        posts={posts} // Se los pasa a SearchWrapper
       />
+
+      
     </>
   );
 }

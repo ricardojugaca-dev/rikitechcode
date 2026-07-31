@@ -6,8 +6,9 @@ import { siteConfig } from "@/lib/site";
 import { metadataKeywords } from "./metadata";
 import { SiteNav } from "@/components/site-nav";
 import Footer from "@/components/footer";
-import { ScrollToTop } from "@/components/scroll-to-top"; // 1. Verificar esta importación
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { HashScrollHandler } from "@/components/hash-scroll-handler";
+import { blog } from "@/lib/source";
 import "@/app/globals.css";
 
 export const viewport: Viewport = {
@@ -17,10 +18,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'Riki Tech Code',
-    template: `%s | Riki Tech Code`,  
+    default: "Riki Tech Code",
+    template: `%s | Riki Tech Code`,
   },
-  description: 'Blog de programación, desarrollo web y proyectos de software por Ricardo.',
+  description:
+    "Blog de programación, desarrollo web y proyectos de software por Ricardo.",
   keywords: metadataKeywords,
 };
 
@@ -29,6 +31,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Leemos los artículos MDX en el servidor de forma nativa
+  const posts = blog.getPages().map((page) => ({
+    slug: page.url.replace("/blog/", ""),
+    title: page.data.title,
+    description: page.data.description ?? "",
+  }));
+
   return (
     <html
       lang="es"
@@ -43,11 +52,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <HashScrollHandler />
-          <SiteNav />
+          <SiteNav posts={posts} />
           <main>{children}</main>
           <Footer />
-
-          {/* 2. VERIFICAR QUE ESTÉ DENTRO DEL BODY Y THEMEPROVIDER */}
           <ScrollToTop />
         </ThemeProvider>
       </body>
