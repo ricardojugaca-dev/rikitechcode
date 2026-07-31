@@ -65,7 +65,7 @@ export async function generateMetadata({
       title: data.title,
       description: data.description,
       keywords: [
-        page.data.title,
+        data.title,
         ...tags,
         "Blog",
         "Article",
@@ -113,7 +113,7 @@ export async function generateMetadata({
       },
       twitter: {
         card: "summary_large_image",
-        title: page.data.title,
+        title: data.title,
         description: page.data.description,
         images: [thumbnail],
         creator: "@dillionverma",
