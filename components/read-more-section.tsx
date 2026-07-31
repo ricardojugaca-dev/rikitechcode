@@ -1,26 +1,23 @@
-/* eslint-disable @next/next/no-img-element */
-import { docs, meta } from "@/.source";
-import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx";
+import { blog } from "@/lib/source";
 import Link from "next/link";
 
-const blogSource = loader({
-  baseUrl: "/blog",
-  source: createMDXSource(docs, meta),
-});
+const formatDate = (dateStr?: string): string => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
 
-const formatDate = (date: Date): string => {
   return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC", // Mantiene la consistencia entre SSR y cliente
   });
 };
 
 interface BlogData {
   title: string;
   description: string;
-  date: string;
+  date?: string;
   tags?: string[];
   featured?: boolean;
   readTime?: string;
@@ -40,10 +37,10 @@ interface ReadMoreSectionProps {
 }
 
 export function ReadMoreSection({
-  currentSlug,
+  currentSlug = [],
   currentTags = [],
 }: ReadMoreSectionProps) {
-  const allPages = blogSource.getPages() as BlogPage[];
+  const allPages = (blog.getPages() as BlogPage[]) || [];
 
   const currentUrl = `/blog/${currentSlug.join("/")}`;
 
@@ -54,17 +51,20 @@ export function ReadMoreSection({
         page.data.tags?.includes(tag)
       ).length;
 
+      const pageDate = page.data.date ? new Date(page.data.date) : new Date(0);
+      const timestamp = isNaN(pageDate.getTime()) ? 0 : pageDate.getTime();
+
       return {
         ...page,
         relevanceScore: tagOverlap,
-        date: new Date(page.data.date),
+        timestamp,
       };
     })
     .sort((a, b) => {
       if (a.relevanceScore !== b.relevanceScore) {
         return b.relevanceScore - a.relevanceScore;
       }
-      return b.date.getTime() - a.date.getTime();
+      return b.timestamp - a.timestamp;
     })
     .slice(0, 3);
 
@@ -79,7 +79,7 @@ export function ReadMoreSection({
 
         <div className="flex flex-col gap-8">
           {otherPosts.map((post) => {
-            const formattedDate = formatDate(post.date);
+            const formattedDate = formatDate(post.data.date);
 
             return (
               <Link
@@ -92,7 +92,7 @@ export function ReadMoreSection({
                     <div className="relative w-full h-full">
                       <img
                         src={post.data.thumbnail}
-                        alt={post.data.title}
+                        alt={post.data.title || "Blog thumbnail"}
                         className="w-full h-full object-cover rounded-lg group-hover:opacity-80 transition-opacity"
                       />
                     </div>
@@ -105,9 +105,11 @@ export function ReadMoreSection({
                   <p className="text-muted-foreground text-sm line-clamp-3 group-hover:underline underline-offset-4">
                     {post.data.description}
                   </p>
-                  <time className="block text-xs font-medium text-muted-foreground">
-                    {formattedDate}
-                  </time>
+                  {formattedDate && (
+                    <time className="block text-xs font-medium text-muted-foreground">
+                      {formattedDate}
+                    </time>
+                  )}
                 </div>
               </Link>
             );

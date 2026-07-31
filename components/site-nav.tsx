@@ -1,116 +1,156 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle"; // ← 1. Importamos ThemeToggle
-import { Menu, X, Youtube, Linkedin, Github, Send } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import SearchModal from "@/components/SearchModal"; // Importamos el modal
+import { Menu, X, Youtube, Linkedin, Github, Send, Search } from "lucide-react";
 
-// ❌ Quitamos: import { LanguageToggle } from "@/components/language-toggle";
+// Lista de prueba para el buscador (puedes añadir o conectar con tus posts reales)
+const postsEjemplo = [
+  { slug: "introduccion-nextjs", title: "Introducción a Next.js App Router", description: "Aprende los conceptos fundamentales de Next.js." },
+  { slug: "tailwind-css-tips", title: "Trucos avanzados de Tailwind CSS", description: "Mejora tu flujo de diseño con estas utilidades." },
+];
 
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  // Listener para atajo de teclado (Ctrl + K o Cmd + K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-20 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="max-w-7xl mx-auto w-full flex h-14 items-center justify-between px-3 sm:px-6">
-        
-        {/* CONTENEDOR IZQUIERDO: LOGO Y REDES EN ESCRITORIO */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            href="/"
-            className="flex items-center font-medium text-lg tracking-tighter h-8 w-8 rounded-md overflow-hidden hover:opacity-80 transition-opacity shrink-0"
-          >
-            <img
-              src="/magicui-logo.png"
-              alt="Riki Tech Code Logo"
-              className="w-10 h-10 object-cover"
-            />
-          </Link>
+    <>
+      <header className="sticky top-0 z-20 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="max-w-7xl mx-auto w-full flex h-14 items-center justify-between px-3 sm:px-6">
+          
+          {/* CONTENEDOR IZQUIERDO: LOGO Y REDES EN ESCRITORIO */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/"
+              className="flex items-center font-medium text-lg tracking-tighter h-8 w-8 rounded-md overflow-hidden hover:opacity-80 transition-opacity shrink-0"
+            >
+              <img
+                src="/magicui-logo.png"
+                alt="Riki Tech Code Logo"
+                className="w-10 h-10 object-cover"
+              />
+            </Link>
 
-          <div className="hidden md:block h-4 w-px bg-border/60" />
+            <div className="hidden md:block h-4 w-px bg-border/60" />
 
-          <div className="hidden md:flex items-center gap-1.5">
+            <div className="hidden md:flex items-center gap-1.5">
+              <SocialIcons />
+            </div>
+          </div>
+
+          {/* REDES SOCIALES EN MÓVIL (Centradas) */}
+          <div className="flex md:hidden items-center justify-center gap-1 sm:gap-1.5 mx-auto">
             <SocialIcons />
+          </div>
+
+          {/* CONTENEDOR DERECHO: BUSCADOR, ENLACES, TEMA Y MENÚ MÓVIL */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            
+            {/* BOTÓN DE BÚSQUEDA */}
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-2 px-2.5 py-1.5 rounded-md border border-border/60 bg-muted/40 hover:bg-muted text-muted-foreground text-xs transition-colors"
+              aria-label="Buscar"
+            >
+              <Search className="w-3.5 h-3.5 text-muted-foreground" />
+              <span className="hidden lg:inline">Buscar...</span>
+              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] bg-background border border-border/80 rounded font-mono text-muted-foreground">
+                ⌘K
+              </kbd>
+            </button>
+
+            {/* Enlaces de navegación (Escritorio) */}
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground mr-2">
+              <Link href="/" className="hover:text-foreground transition-colors">
+                Inicio
+              </Link>
+              <Link href="/blog" className="hover:text-foreground transition-colors">
+                Blog
+              </Link>
+              <Link href="/about" className="hover:text-foreground transition-colors">
+                Sobre mí
+              </Link>
+              <Link href="/privacy" className="hover:text-foreground transition-colors">
+                Privacidad
+              </Link>
+            </nav>
+
+            {/* CAMBIO DE TEMA */}
+            <ThemeToggle />
+
+            {/* BOTÓN HAMBURGUESA (Móviles) */}
+            <button
+              onClick={toggleMenu}
+              className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus:outline-none"
+              aria-label="Abrir menú"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
 
-        {/* REDES SOCIALES EN MÓVIL (Centradas) */}
-        <div className="flex md:hidden items-center justify-center gap-1 sm:gap-1.5 mx-auto">
-          <SocialIcons />
-        </div>
+        {/* MENÚ MÓVIL DESPLEGABLE */}
+        {isOpen && (
+          <div className="md:hidden border-b border-border/40 bg-background px-6 py-4 animate-in fade-in slide-in-from-top-2">
+            <nav className="flex flex-col space-y-3 text-sm font-medium">
+              <Link 
+                href="/" 
+                onClick={() => setIsOpen(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors py-1"
+              >
+                Inicio
+              </Link>
+              <Link 
+                href="/blog" 
+                onClick={() => setIsOpen(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors py-1"
+              >
+                Blog
+              </Link>
+              <Link 
+                href="/about" 
+                onClick={() => setIsOpen(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors py-1"
+              >
+                Sobre mí
+              </Link>
+              <Link 
+                href="/privacy" 
+                onClick={() => setIsOpen(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors py-1"
+              >
+                Privacidad
+              </Link>
+            </nav>
+          </div>
+        )}
+      </header>
 
-        {/* CONTENEDOR DERECHO: ENLACES, TEMA Y MENÚ MÓVIL */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          
-          {/* Enlaces de navegación (Escritorio) */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground mr-2">
-            <Link href="/" className="hover:text-foreground transition-colors">
-              Inicio
-            </Link>
-            <Link href="/blog" className="hover:text-foreground transition-colors">
-              Blog
-            </Link>
-            <Link href="/about" className="hover:text-foreground transition-colors">
-              Sobre mí
-            </Link>
-            <Link href="/privacy" className="hover:text-foreground transition-colors">
-              Privacidad
-            </Link>
-          </nav>
-
-          {/* CAMBIO DE TEMA */}
-          <ThemeToggle />
-
-          {/* BOTÓN HAMBURGUESA (Móviles) */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus:outline-none"
-            aria-label="Abrir menú"
-          >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </div>
-
-      {/* MENÚ MÓVIL DESPLEGABLE */}
-      {isOpen && (
-        <div className="md:hidden border-b border-border/40 bg-background px-6 py-4 animate-in fade-in slide-in-from-top-2">
-          <nav className="flex flex-col space-y-3 text-sm font-medium">
-            <Link 
-              href="/" 
-              onClick={() => setIsOpen(false)}
-              className="text-muted-foreground hover:text-foreground transition-colors py-1"
-            >
-              Inicio
-            </Link>
-            <Link 
-              href="/blog" 
-              onClick={() => setIsOpen(false)}
-              className="text-muted-foreground hover:text-foreground transition-colors py-1"
-            >
-              Blog
-            </Link>
-            <Link 
-              href="/about" 
-              onClick={() => setIsOpen(false)}
-              className="text-muted-foreground hover:text-foreground transition-colors py-1"
-            >
-              Sobre mí
-            </Link>
-            <Link 
-              href="/privacy" 
-              onClick={() => setIsOpen(false)}
-              className="text-muted-foreground hover:text-foreground transition-colors py-1"
-            >
-              Privacidad
-            </Link>
-          </nav>
-        </div>
-      )}
-    </header>
+      {/* COMPONENTE MODAL DE BÚSQUEDA */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        posts={postsEjemplo}
+      />
+    </>
   );
 }
 

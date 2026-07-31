@@ -1,11 +1,9 @@
-import { docs, meta } from "@/.source";
-import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx";
 import { Suspense } from "react";
 import Link from "next/link";
 import { BlogCard } from "@/components/blog-card";
 import { TagFilter } from "@/components/tag-filter";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import { blog } from "@/lib/source"; // 👈 Usamos la fuente centralizada de Fumadocs
 
 interface BlogData {
   title: string;
@@ -24,11 +22,6 @@ interface BlogPage {
   data: BlogData;
 }
 
-const blogSource = loader({
-  baseUrl: "/blog",
-  source: createMDXSource(docs, meta),
-});
-
 const formatDate = (date: Date): string => {
   return date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -45,7 +38,9 @@ export default async function HomePage({
   searchParams: Promise<{ tag?: string; page?: string }>;
 }) {
   const resolvedSearchParams = await searchParams;
-  const allPages = blogSource.getPages() as BlogPage[];
+  
+  // Obtenemos los blogs directamente desde la fuente centralizada 'blog'
+  const allPages = (blog.getPages() as unknown as BlogPage[]) || [];
   
   const sortedBlogs = allPages.sort((a, b) => {
     const dateA = new Date(a.data.date).getTime();
@@ -56,7 +51,7 @@ export default async function HomePage({
   const allTags = [
     "All",
     ...Array.from(
-      new Set(sortedBlogs.flatMap((blog) => blog.data.tags || []))
+      new Set(sortedBlogs.flatMap((blogItem) => blogItem.data.tags || []))
     ).sort(),
   ];
 
@@ -66,7 +61,7 @@ export default async function HomePage({
   const filteredBlogs =
     selectedTag === "All"
       ? sortedBlogs
-      : sortedBlogs.filter((blog) => blog.data.tags?.includes(selectedTag));
+      : sortedBlogs.filter((blogItem) => blogItem.data.tags?.includes(selectedTag));
 
   // 2. Cálculo de Paginación
   const currentPage = Number(resolvedSearchParams.page) || 1;
@@ -83,8 +78,8 @@ export default async function HomePage({
     if (tag === "All") {
       acc[tag] = sortedBlogs.length;
     } else {
-      acc[tag] = sortedBlogs.filter((blog) =>
-        blog.data.tags?.includes(tag)
+      acc[tag] = sortedBlogs.filter((blogItem) =>
+        blogItem.data.tags?.includes(tag)
       ).length;
     }
     return acc;
@@ -129,19 +124,19 @@ export default async function HomePage({
         <Suspense fallback={<div>Loading articles...</div>}>
           {/* CUADRÍCULA DE TARJETAS (PAGINADAS) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {paginatedBlogs.map((blog) => {
-              const date = new Date(blog.data.date);
+            {paginatedBlogs.map((blogItem) => {
+              const date = new Date(blogItem.data.date);
               const formattedDate = formatDate(date);
 
               return (
                 <BlogCard
-                  key={blog.url}
-                  url={blog.url}
-                  title={blog.data.title}
-                  description={blog.data.description}
+                  key={blogItem.url}
+                  url={blogItem.url}
+                  title={blogItem.data.title}
+                  description={blogItem.data.description}
                   date={formattedDate}
-                  thumbnail={blog.data.thumbnail}
-                  tags={blog.data.tags}
+                  thumbnail={blogItem.data.thumbnail}
+                  tags={blogItem.data.tags}
                 />
               );
             })}

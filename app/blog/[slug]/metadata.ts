@@ -1,13 +1,6 @@
 import { Metadata } from "next";
-import { docs, meta } from "@/.source";
-import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx";
+import { blog } from "@/lib/source";
 import { siteConfig } from "@/lib/site";
-
-const blogSource = loader({
-  baseUrl: "/blog",
-  source: createMDXSource(docs, meta),
-});
 
 export async function generateMetadata({
   params,
@@ -24,7 +17,7 @@ export async function generateMetadata({
       };
     }
 
-    const page = blogSource.getPage([slug]);
+    const page = blog.getPage([slug]);
 
     if (!page) {
       return {
@@ -36,12 +29,34 @@ export async function generateMetadata({
     const ogUrl = `${siteConfig.url}/blog/${slug}`;
     const ogImage = `${ogUrl}/opengraph-image`;
 
+    const tags = Array.isArray(page.data.tags)
+      ? page.data.tags.filter(
+          (tag): tag is string => typeof tag === "string"
+        )
+      : [];
+
+    const author =
+      typeof page.data.author === "string" && page.data.author.trim()
+        ? page.data.author
+        : "Magic UI";
+
+    const thumbnail =
+      typeof page.data.thumbnail === "string" &&
+      page.data.thumbnail.trim()
+        ? page.data.thumbnail
+        : ogImage;
+
+    const date =
+      typeof page.data.date === "string"
+        ? page.data.date
+        : undefined;
+
     return {
       title: page.data.title,
       description: page.data.description,
       keywords: [
         page.data.title,
-        ...(page.data.tags || []),
+        ...tags,
         "Blog",
         "Article",
         "Web Development",
@@ -51,11 +66,11 @@ export async function generateMetadata({
       ],
       authors: [
         {
-          name: page.data.author || "Magic UI",
+          name: author,
           url: siteConfig.url,
         },
       ],
-      creator: page.data.author || "Magic UI",
+      creator: author,
       publisher: "Magic UI",
       robots: {
         index: true,
@@ -73,12 +88,12 @@ export async function generateMetadata({
         description: page.data.description,
         type: "article",
         url: ogUrl,
-        publishedTime: page.data.date,
-        authors: [page.data.author || "Magic UI"],
-        tags: page.data.tags,
+        publishedTime: date,
+        authors: [author],
+        tags,
         images: [
           {
-            url: page.data.thumbnail || ogImage,
+            url: thumbnail,
             width: 1200,
             height: 630,
             alt: page.data.title,
@@ -90,7 +105,7 @@ export async function generateMetadata({
         card: "summary_large_image",
         title: page.data.title,
         description: page.data.description,
-        images: [page.data.thumbnail || ogImage],
+        images: [thumbnail],
         creator: "@dillionverma",
         site: "@dillionverma",
       },
@@ -100,6 +115,7 @@ export async function generateMetadata({
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
+
     return {
       title: "Blog Not Found",
       description: "The requested blog post could not be found.",

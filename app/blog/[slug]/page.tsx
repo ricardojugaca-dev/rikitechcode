@@ -1,12 +1,11 @@
-import { docs, meta } from "@/.source";
 import { DocsBody } from "fumadocs-ui/page";
-import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+
+import { blog } from "@/lib/source";
 
 import { MobileTableOfContents } from "@/components/mobile-toc";
 import { ReadMoreSection } from "@/components/read-more-section";
@@ -24,17 +23,13 @@ interface BlogData {
   tags?: string[];
   thumbnail?: string;
   author?: string;
+  body: React.FC;
 }
 
 interface BlogPage {
   url: string;
   data: BlogData;
 }
-
-const blogSource = loader({
-  baseUrl: "/blog",
-  source: createMDXSource(docs, meta),
-});
 
 const formatDate = (date: Date): string => {
   return date.toLocaleDateString("en-US", {
@@ -51,7 +46,7 @@ export default async function BlogPost({ params }: PageProps) {
     notFound();
   }
 
-  const page = blogSource.getPage([slug]);
+  const page = blog.getPage([slug]) as unknown as BlogPage | undefined;
 
   if (!page) {
     notFound();
@@ -61,8 +56,7 @@ export default async function BlogPost({ params }: PageProps) {
   const date = new Date(page.data.date);
   const formattedDate = formatDate(date);
 
-  // Obtener y ordenar los 5 posts más recientes
-  const allPages = blogSource.getPages() as BlogPage[];
+  const allPages = (blog.getPages() as unknown as BlogPage[]) || [];
   const recentPosts = allPages
     .map((p) => ({
       ...p,
@@ -71,7 +65,6 @@ export default async function BlogPost({ params }: PageProps) {
     .sort((a, b) => b.parsedDate.getTime() - a.parsedDate.getTime())
     .slice(0, 5);
 
-  // 8 Redes sociales con sus botones estilizados de dos tonos
   const socialLinks = [
     {
       name: "YouTube",
@@ -159,7 +152,6 @@ export default async function BlogPost({ params }: PageProps) {
     <div className="min-h-screen bg-background relative flex flex-col justify-between">
       <HashScrollHandler />
       
-      {/* FONDO FLICKERING GRID */}
       <div className="absolute top-0 left-0 z-0 w-full h-[200px] [mask-image:linear-gradient(to_top,transparent_25%,black_95%)]">
         <FlickeringGrid
           className="absolute top-0 left-0 size-full"
@@ -171,7 +163,6 @@ export default async function BlogPost({ params }: PageProps) {
         />
       </div>
 
-      {/* SECCIÓN SUPERIOR: METADATOS Y TÍTULO */}
       <div className="space-y-4 border-b border-border relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col gap-6 p-6">
           <div className="flex flex-col gap-3">
@@ -233,23 +224,17 @@ export default async function BlogPost({ params }: PageProps) {
         </div>
       </div>
 
-      {/* CONTENEDOR DE LA REJILLA CON LÍNEAS DIVISIONARIAS VISIBLES EN MÓVIL Y DESKTOP */}
       <div className="relative flex-1 max-w-7xl w-full mx-auto z-10 px-3 sm:px-0">
-        
-        {/* LÍNEAS DIVISIONARIAS VERTICALES DE BORDE EXTERIOR */}
         <div className="absolute inset-y-0 left-3 right-3 sm:left-0 sm:right-0 max-w-7xl mx-auto border-x border-border pointer-events-none z-20" />
 
-        {/* CAMBIO CLAVE 1: flex-col en móvil, md:flex-row en escritorio. Divide las secciones con borde. */}
         <div className="flex flex-col md:flex-row md:divide-x divide-y md:divide-y-0 divide-border w-full h-full min-h-full">
-          
-          {/* COLUMNA IZQUIERDA: CONTENIDO Y POSTS RELACIONADOS */}
           <main className="flex-1 w-full min-w-0 p-0 overflow-hidden flex flex-col justify-between">
             <div>
               {page.data.thumbnail && (
                 <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden object-cover border-b border-border">
                   <Image
                     src={page.data.thumbnail}
-                    alt={page.data.title}
+                    alt={page.data.title || "Thumbnail"}
                     fill
                     className="object-cover"
                     priority
@@ -273,11 +258,8 @@ export default async function BlogPost({ params }: PageProps) {
             </div>
           </main>
 
-          {/* CAMBIO CLAVE 2: quitamos 'hidden', ahora se muestra siempre. En móvil abarca w-full, en md toma su ancho normal */}
           <aside className="w-full md:w-[300px] lg:w-[380px] flex-shrink-0 p-4 lg:p-8 bg-muted/30 dark:bg-muted/10">
             <div className="sticky top-20 space-y-6">
-              
-              {/* 1. TARJETA DE LOGO + REDES SOCIALES (DOS TONOS) */}
               <div className="border border-border/80 rounded-xl p-5 bg-card/90 text-card-foreground shadow-sm flex flex-col items-center text-center space-y-4">
                 <div className="flex flex-col items-center gap-2">
                   <div className="w-14 h-14 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center overflow-hidden">
@@ -297,7 +279,6 @@ export default async function BlogPost({ params }: PageProps) {
                   ¡Sígueme en todas mis redes sociales!
                 </p>
 
-                {/* Grid de 8 redes sociales (se adapta de 2 a 4 columnas según la pantalla) */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-2.5 w-full pt-1">
                   {socialLinks.map((social) => (
                     <a
@@ -307,12 +288,10 @@ export default async function BlogPost({ params }: PageProps) {
                       rel="noopener noreferrer"
                       className={`group relative flex items-center h-10 rounded-lg overflow-hidden text-white font-medium shadow-sm transition-all duration-200 hover:scale-[1.02] hover:shadow-md ${social.bgClass}`}
                     >
-                      {/* Franja izquierda más oscura para el icono */}
                       <div className="w-9 h-full bg-black/15 flex items-center justify-center flex-shrink-0 border-r border-white/10">
                         {social.icon}
                       </div>
 
-                      {/* Texto del botón */}
                       <span className="flex-1 text-center text-xs font-semibold pr-2 tracking-wide truncate">
                         {social.name}
                       </span>
@@ -321,7 +300,6 @@ export default async function BlogPost({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* 2. TARJETA DE RECENT POSTS */}
               <div className="border border-border/80 rounded-xl p-5 bg-card/90 text-card-foreground shadow-sm space-y-4">
                 <h3 className="font-semibold text-sm text-foreground border-b border-border/60 pb-2.5">
                   Recent Posts
@@ -338,7 +316,7 @@ export default async function BlogPost({ params }: PageProps) {
                         <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0 border border-border/60">
                           <Image
                             src={post.data.thumbnail}
-                            alt={post.data.title}
+                            alt={post.data.title || "Post thumbnail"}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-200"
                           />
@@ -377,10 +355,8 @@ export default async function BlogPost({ params }: PageProps) {
                   ))}
                 </div>
               </div>
-
             </div>
           </aside>
-
         </div>
       </div>
 

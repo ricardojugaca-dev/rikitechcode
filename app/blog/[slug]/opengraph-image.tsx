@@ -1,8 +1,10 @@
 import { ImageResponse } from "next/og";
-import { docs, meta } from "@/.source";
-import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx";
-import { getAuthor, isValidAuthor, type AuthorKey } from "@/lib/authors";
+import { blog } from "@/lib/source";
+import {
+  getAuthor,
+  isValidAuthor,
+  type AuthorKey,
+} from "@/lib/authors";
 
 export const runtime = "nodejs";
 export const alt = "Blog Post";
@@ -12,10 +14,7 @@ export const size = {
 };
 export const contentType = "image/png";
 
-const blogSource = loader({
-  baseUrl: "/blog",
-  source: createMDXSource(docs, meta),
-});
+
 
 const getAssetData = async (authorAvatar?: string) => {
   try {
@@ -166,17 +165,27 @@ const styles = {
 
 export default async function Image({ params }: { params: { slug: string } }) {
   try {
-    const page = await blogSource.getPage([params.slug]);
+    const page = blog.getPage([params.slug]);
 
     if (!page) {
-      return new Response("Blog post not found", { status: 404 });
-    }
+  return new Response("Blog post not found", { status: 404 });
+}
 
-    const authorKey = page.data.author as string;
-    const authorDetails =
-      authorKey && isValidAuthor(authorKey)
-        ? getAuthor(authorKey as AuthorKey)
-        : null;
+const authorKey =
+  typeof page.data.author === "string"
+    ? page.data.author
+    : "";
+
+const date =
+  typeof page.data.date === "string"
+    ? page.data.date
+    : undefined;
+
+const authorDetails =
+  authorKey && isValidAuthor(authorKey)
+    ? getAuthor(authorKey as AuthorKey)
+    : null;
+    
 
     const assetData = await getAssetData(authorDetails?.avatar);
 
@@ -232,12 +241,13 @@ export default async function Image({ params }: { params: { slug: string } }) {
                   <span>{authorDetails.name}</span>
                 </div>
               )}
-              {authorDetails && page.data.date && (
+              {authorDetails && date && (
                 <span style={styles.dotSeparator}>•</span>
               )}
-              {page.data.date && (
+
+              {date && (
                 <p style={{ ...styles.metaBase, ...styles.dateMeta }}>
-                  {formatDate(page.data.date)}
+                  {formatDate(date)}
                 </p>
               )}
             </div>
