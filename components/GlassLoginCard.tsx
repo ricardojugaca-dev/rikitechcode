@@ -101,7 +101,7 @@ export default function GlassLoginCard() {
 
         {/* Footer */}
         <p className="text-center text-xs text-slate-300 mt-8">
-          Don't have an account?{" "}
+          {"Don't have an account?"}{" "}
           <a
             href="#"
             className="font-medium text-indigo-300 hover:text-indigo-200 underline underline-offset-4"
