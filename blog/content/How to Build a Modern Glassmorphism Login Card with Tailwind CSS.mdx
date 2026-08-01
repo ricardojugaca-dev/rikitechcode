@@ -1,0 +1,549 @@
+---
+title: "How to Build a Modern Glassmorphism Login Card with Tailwind CSS"
+description: "Learn how to build a responsive Glassmorphism login card with React, Tailwind CSS, and Lucide Icons, including password visibility, responsive styling, and accessibility improvements."
+date: "2026-08-01"
+tags: ["Tailwind CSS", "React", "UI Design", "Next.js"]
+featured: true
+readTime: "8 min read"
+author: "Ricardo Garcia"
+thumbnail: "/thumbnails/login.png"
+---
+
+Glassmorphism is a popular UI design style that combines translucent backgrounds, subtle borders, soft shadows, and background blur effects to create the appearance of frosted glass.
+
+In this tutorial, you will build a modern and responsive **Glassmorphism Login Card** using **React, Tailwind CSS, and Lucide Icons**.
+
+The component will include an email field, a password field, a button to show or hide the password, animated background glow effects, and smooth hover and focus transitions.
+
+## What You Will Build
+
+By the end of this tutorial, you will have a responsive login card with:
+
+- A modern Glassmorphism design
+- A translucent background with a frosted-glass effect
+- Animated background glow effects
+- Email and password input fields
+- Lucide icons inside the form fields
+- A button to show or hide the password
+- Responsive spacing for mobile and desktop screens
+- Smooth hover and focus transitions
+- Basic accessibility improvements
+
+## Why Use Glassmorphism in Modern UIs?
+
+Glassmorphism can make user interfaces feel more modern while creating visual separation between foreground content and colorful backgrounds.
+
+Some of its main advantages include:
+
+- **Visual Depth:** Translucent layers help separate important content from the background.
+- **Modern Aesthetic:** Frosted-glass effects can give applications a clean and premium appearance.
+- **Flexible Design:** The style works well with gradients, images, and colorful background elements.
+- **Reusable Components:** The same visual approach can be used for login forms, cards, modals, navigation menus, and dashboard widgets.
+
+## Prerequisites
+
+Before getting started, make sure your project includes the following:
+
+1. A **Next.js** or **React** application.
+2. **Tailwind CSS** installed and configured.
+3. **Lucide React** for the form icons.
+
+If you are using Next.js and do not have a project yet, you can create one with:
+
+```bash
+npx create-next-app@latest glassmorphism-login
+```
+
+After creating the project, open the project folder:
+
+```bash
+cd glassmorphism-login
+```
+
+## Install Lucide Icons
+
+Lucide provides a collection of lightweight and customizable SVG icons for React applications.
+
+Install the package by running:
+
+```bash
+npm install lucide-react
+```
+
+## Create the Login Component
+
+Create a new file inside your components directory:
+
+```text
+components/GlassLoginCard.tsx
+```
+
+Then, paste the following code into the file.
+
+## Complete Glassmorphism Login Card Code
+
+```tsx
+"use client";
+
+import React, { useState } from "react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+} from "lucide-react";
+
+export default function GlassLoginCard() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    console.log("Logging in with:", {
+      email,
+      password,
+    });
+  };
+
+  return (
+    <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 p-4">
+      {/* Background Decorative Blobs */}
+      <div className="pointer-events-none absolute left-1/3 top-1/4 h-72 w-72 rounded-full bg-purple-500/30 blur-3xl animate-pulse" />
+
+      <div className="pointer-events-none absolute bottom-1/4 right-1/3 h-80 w-80 rounded-full bg-indigo-500/20 blur-3xl" />
+
+      {/* Glassmorphism Card */}
+      <div className="relative z-10 w-full max-w-md rounded-2xl border border-white/20 bg-white/10 p-8 shadow-2xl backdrop-blur-md transition-all duration-300">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-white">
+            Welcome Back
+          </h2>
+
+          <p className="mt-2 text-sm text-slate-300">
+            Enter your details to access your account
+          </p>
+        </div>
+
+        {/* Login Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+        >
+          {/* Email Field */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="email"
+              className="text-xs font-medium text-slate-200"
+            >
+              Email Address
+            </label>
+
+            <div className="relative flex items-center">
+              <Mail className="absolute left-3.5 h-5 w-5 text-slate-400" />
+
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
+                placeholder="name@example.com"
+                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-11 pr-4 text-sm text-white placeholder:text-slate-400 transition-all focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              />
+            </div>
+          </div>
+
+          {/* Password Field */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="password"
+                className="text-xs font-medium text-slate-200"
+              >
+                Password
+              </label>
+
+              <a
+                href="#"
+                className="text-xs text-indigo-300 transition-colors hover:text-indigo-200"
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            <div className="relative flex items-center">
+              <Lock className="absolute left-3.5 h-5 w-5 text-slate-400" />
+
+              <input
+                id="password"
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
+                required
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                placeholder="••••••••"
+                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-11 pr-11 text-sm text-white placeholder:text-slate-400 transition-all focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              />
+
+              <button
+                type="button"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
+                aria-label={
+                  showPassword
+                    ? "Hide password"
+                    : "Show password"
+                }
+                aria-pressed={showPassword}
+                className="absolute right-3.5 text-slate-400 transition-colors hover:text-slate-200"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-3.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-600 hover:to-purple-700 active:scale-[0.98]"
+          >
+            <span>Sign In</span>
+
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="mt-8 text-center text-xs text-slate-300">
+          Don't have an account?{" "}
+
+          <a
+            href="#"
+            className="font-medium text-indigo-300 underline underline-offset-4 hover:text-indigo-200"
+          >
+            Sign up now
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+```
+
+## Use the Component
+
+After creating the component, import it into a page.
+
+For example, if you are using the Next.js App Router, open:
+
+```text
+app/page.tsx
+```
+
+Then add the following code:
+
+```tsx
+import GlassLoginCard from "@/components/GlassLoginCard";
+
+export default function Home() {
+  return <GlassLoginCard />;
+}
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open your local application in the browser to see the Glassmorphism login card.
+
+## How the Component Works
+
+The component combines React state, Tailwind CSS utility classes, and Lucide icons.
+
+The following sections explain the most important parts of the implementation.
+
+### Managing the Form State
+
+The component uses React's `useState` hook to store the email and password values:
+
+```tsx
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+```
+
+The `email` and `password` state variables contain the values entered by the user.
+
+Each input uses the `value` and `onChange` properties to keep the React state synchronized with the form:
+
+```tsx
+<input
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+/>
+```
+
+This makes the input a **controlled React component**.
+
+Whenever the user types inside the input, the `onChange` event updates the corresponding state value.
+
+### Handling Form Submission
+
+The form uses the `onSubmit` event to execute the `handleSubmit` function:
+
+```tsx
+<form onSubmit={handleSubmit}>
+```
+
+The function prevents the browser from refreshing the page:
+
+```tsx
+const handleSubmit = (
+  e: React.FormEvent
+) => {
+  e.preventDefault();
+
+  console.log("Logging in with:", {
+    email,
+    password,
+  });
+};
+```
+
+For this tutorial, the submitted values are displayed in the browser console.
+
+In a production application, you would replace `console.log()` with a request to an authentication API or backend service.
+
+### Creating the Glass Effect
+
+The main card uses several Tailwind CSS utility classes to create the Glassmorphism appearance:
+
+```tsx
+<div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl">
+```
+
+Each class contributes to a different part of the visual effect:
+
+- **`bg-white/10`** adds a white background with 10% opacity.
+- **`backdrop-blur-md`** blurs the content behind the card.
+- **`border border-white/20`** adds a thin, semi-transparent border that simulates the reflective edge of glass.
+- **`rounded-2xl`** creates large rounded corners.
+- **`shadow-2xl`** adds a large shadow that separates the card from the background.
+
+The combination of transparency, blur, borders, and shadows creates the frosted-glass appearance.
+
+### Creating the Background Glow
+
+The decorative background elements use blurred circles:
+
+```tsx
+<div className="h-72 w-72 rounded-full bg-purple-500/30 blur-3xl" />
+```
+
+The important classes are:
+
+- **`rounded-full`** transforms the square element into a circle.
+- **`bg-purple-500/30`** applies a purple background with 30% opacity.
+- **`blur-3xl`** creates a large and soft glow effect.
+- **`animate-pulse`** adds a subtle animation to the first background glow.
+
+The main container uses `relative`, allowing the decorative elements to be positioned inside it with `absolute`.
+
+The `overflow-hidden` class prevents the blurred elements from creating unwanted horizontal scrolling.
+
+### Adding Icons to the Inputs
+
+Lucide icons are positioned inside the input fields using Tailwind's positioning utilities:
+
+```tsx
+<Mail className="absolute left-3.5 h-5 w-5 text-slate-400" />
+```
+
+The icon uses `absolute` positioning, while the parent container uses `relative`:
+
+```tsx
+<div className="relative flex items-center">
+```
+
+The input includes extra left padding:
+
+```tsx
+className="pl-11"
+```
+
+This creates enough space for the icon and prevents the text from overlapping it.
+
+### Toggling Password Visibility
+
+The password visibility feature uses the following state:
+
+```tsx
+const [showPassword, setShowPassword] =
+  useState(false);
+```
+
+When the user clicks the icon button, the state changes between `true` and `false`:
+
+```tsx
+onClick={() =>
+  setShowPassword(!showPassword)
+}
+```
+
+The input type changes dynamically:
+
+```tsx
+type={
+  showPassword
+    ? "text"
+    : "password"
+}
+```
+
+When `showPassword` is `false`, the password is hidden.
+
+When `showPassword` is `true`, the password becomes visible.
+
+The icon also changes depending on the current state:
+
+```tsx
+{showPassword ? (
+  <EyeOff />
+) : (
+  <Eye />
+)}
+```
+
+### Creating the Submit Button
+
+The submit button uses a gradient and several interaction effects:
+
+```tsx
+<button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700">
+```
+
+The important classes are:
+
+- **`bg-gradient-to-r`** creates a horizontal gradient.
+- **`from-indigo-500`** defines the starting gradient color.
+- **`to-purple-600`** defines the ending gradient color.
+- **`hover:from-indigo-600`** changes the starting color when the user hovers over the button.
+- **`hover:to-purple-700`** changes the ending color on hover.
+- **`active:scale-[0.98]`** slightly reduces the button size while it is being clicked.
+- **`transition-all`** creates smooth visual transitions.
+
+The arrow icon moves slightly to the right when the user hovers over the button:
+
+```tsx
+<ArrowRight className="group-hover:translate-x-1" />
+```
+
+The parent button uses the `group` class, allowing the icon to respond to the button's hover state.
+
+## Key Tailwind CSS Utility Classes
+
+The following table summarizes some of the most important Tailwind CSS classes used in the component:
+
+| Utility Class | Description |
+| --- | --- |
+| `bg-white/10` | Adds a white background with 10% opacity. |
+| `backdrop-blur-md` | Blurs the content behind the card. |
+| `border-white/20` | Adds a semi-transparent white border. |
+| `rounded-2xl` | Creates large rounded corners. |
+| `shadow-2xl` | Adds a large shadow behind the card. |
+| `bg-gradient-to-br` | Creates a diagonal background gradient. |
+| `blur-3xl` | Applies a strong blur to the decorative circles. |
+| `focus:ring-1` | Adds a visible focus indicator to the inputs. |
+| `transition-all` | Smoothly animates supported visual changes. |
+| `group-hover:translate-x-1` | Moves the arrow icon when the button is hovered. |
+
+> `blur-3xl` and `backdrop-blur-md` create different effects. `blur-3xl` blurs the element itself, while `backdrop-blur-md` blurs the content behind an element.
+
+## Accessibility Improvements
+
+The component includes several small accessibility improvements.
+
+Each label is connected to its input using `htmlFor` and `id`:
+
+```tsx
+<label htmlFor="email">
+  Email Address
+</label>
+
+<input
+  id="email"
+  type="email"
+/>
+```
+
+This allows users to select the input by clicking its label.
+
+The password visibility button also includes an accessible label:
+
+```tsx
+aria-label={
+  showPassword
+    ? "Hide password"
+    : "Show password"
+}
+```
+
+Screen readers can use this information to describe the button's current purpose.
+
+The `aria-pressed` attribute communicates whether password visibility is currently enabled:
+
+```tsx
+aria-pressed={showPassword}
+```
+
+## Customization Ideas
+
+You can easily customize this component to match your own project.
+
+Try the following changes:
+
+- Replace the indigo and purple colors with your brand colors.
+- Change `bg-white/10` to `bg-white/15` to make the card less transparent.
+- Replace `backdrop-blur-md` with `backdrop-blur-lg` for a stronger blur effect.
+- Add validation messages below the email and password fields.
+- Add a loading state to the submit button.
+- Connect the form to a real authentication API.
+- Replace the background gradient with an image.
+- Reuse the Glassmorphism style for registration forms, modals, navigation menus, or dashboard cards.
+
+## Conclusion
+
+You have now built a responsive Glassmorphism login card using React, Tailwind CSS, and Lucide Icons.
+
+The component combines translucent backgrounds, backdrop blur effects, subtle borders, soft shadows, animated background glows, and interactive form controls to create a modern user interface.
+
+You can reuse the same design approach for:
+
+- Registration forms
+- Profile cards
+- Modal windows
+- Dashboard widgets
+- Navigation menus
+
+The current form only logs the submitted values to the browser console.
+
+As a next step, you can connect the form to an authentication service, a custom backend API, or a database.
+
+Experiment with different colors, blur levels, and animations to create a Glassmorphism design that matches your own project.
