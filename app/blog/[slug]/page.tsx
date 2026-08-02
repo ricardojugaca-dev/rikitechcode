@@ -231,16 +231,16 @@ export default async function BlogPost({ params }: PageProps) {
           <main className="flex-1 w-full min-w-0 p-0 overflow-hidden flex flex-col justify-between">
             <div>
               {page.data.thumbnail && (
-                <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden object-cover border-b border-border">
-                  <Image
-                    src={page.data.thumbnail}
-                    alt={page.data.title || "Thumbnail"}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              )}
+                  <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden border-b border-border">
+                    <Image
+                      src={page.data.thumbnail}
+                      alt={page.data.title || "Thumbnail"}
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
+                )}
               <div className="p-4 sm:p-6 lg:p-10">
                 <div className="prose dark:prose-invert max-w-none prose-headings:scroll-mt-8 prose-headings:font-semibold prose-a:no-underline prose-headings:tracking-tight prose-headings:text-balance prose-p:tracking-tight prose-p:text-balance prose-lg">
                   <DocsBody>
